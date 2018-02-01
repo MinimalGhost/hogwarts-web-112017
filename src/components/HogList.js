@@ -2,14 +2,22 @@ import React from 'react';
 import HogItem from './HogItem'
 import HogFilter from './HogFilter'
 import hogs from '../porkers_data'
+
 class HogList extends React.Component {
   constructor() {
     super()
 
     this.state = {
       hogData: hogs,
-      sortBy: 'name'
+      sortBy: 'name',
+      greased: false
     }
+  }
+
+  toggleGrease = () => {
+    this.setState( prevState => ({
+      greased: !prevState.greased
+    }))
   }
 
   sortMethod = (sortValue) => {
@@ -41,24 +49,35 @@ class HogList extends React.Component {
         <HogItem key={hog.name} hogInfo={hog} />
       )
     });
+    return hogsByName
   }
 
-  sortByWeight = () => {
+  filterGreased = () => {
+    let allHogs;
+    let filteredHogs = null
+    if (this.state.greased){
+      filteredHogs = this.state.hogData.filter((hog) => {
+        return hog.greased === true
+      })
+    }
+    
+    if (filteredHogs !== null){
+      allHogs = this.createHogs(filteredHogs)
+    } else {
+      allHogs = this.createHogs(this.state.hogData)
+    }
 
+    return allHogs
   }
+
+
 
   render() {
-    let allHogs = this.state.hogData.map((hog) => {
-      return (<HogItem
-        key={hog.name}
-        hogInfo={hog}
-      />)
-    });
-
+    let allHogs = this.filterGreased()
     return (
       <div>
         <HogFilter
-          sortMethod={this.sortMethod}
+          sortMethod={this.sortMethod} toggleGrease = {this.toggleGrease}
         />
         {allHogs}
       </div>

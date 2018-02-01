@@ -9,15 +9,22 @@ class HogFilter extends React.Component {
     this.props.sortMethod(e.target.value)
   }
 
+  handleGreasedCheck = () => {
+    this.props.toggleGrease()
+  }
+
   render() {
     return (
-      <form>
+      <div>
+        <label>
+          GREASED????</label>
+        <input onClick ={this.handleGreasedCheck} type='checkbox' />
         <label>Order by weight:</label>
         <select onChange={this.handleSelect}>
           <option value="name">Name</option>
           <option value="weight">Weight</option>
         </select>
-      </form>
+      </div>
     )
   }
 }
